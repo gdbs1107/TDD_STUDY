@@ -19,6 +19,21 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Sql("/sql/user-repository-test-data.sql")
 public class UserRepositoryTest {
 
+
+    /**
+    * userRepository를 테스트하는 코드
+     * sql을 미리 작성하여 중복을 방지 할 수 있다
+
+     * @DataJpaTest(showSql = true)
+     * 이 코드에 @ExtendWith(SpringExtension.class) 이 포함되어있어서 그냥
+     * 저것만 넣어줘도 된다
+     *
+     *
+     * junit의 문법은 따로 공부해야 할 듯
+    * */
+
+
+
     @Autowired
     private UserRepository userRepository;
 
