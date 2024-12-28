@@ -75,6 +75,10 @@ public class UserService {
         userEntity.setStatus(UserStatus.ACTIVE);
     }
 
+
+
+
+
     private void sendCertificationEmail(String email, String certificationUrl) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
