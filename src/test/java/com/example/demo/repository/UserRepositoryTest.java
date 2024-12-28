@@ -1,0 +1,82 @@
+package com.example.demo.repository;
+
+import com.example.demo.model.UserStatus;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+
+@ExtendWith(SpringExtension.class)
+@DataJpaTest(showSql = true)
+@Sql("/sql/user-repository-test-data.sql")
+public class UserRepositoryTest {
+
+    @Autowired
+    private UserRepository userRepository;
+
+
+
+    @Test
+    void findByIdAndStatus_로_유저_데이터를_찾아올_수_있다(){
+
+        //given
+        //when
+        Optional<UserEntity> savedUser = userRepository.findByIdAndStatus(1L, UserStatus.ACTIVE);
+
+        //then
+        assertThat(savedUser.isPresent()).isNotNull();
+
+    }
+
+
+
+    @Test
+    void findByIdAndStatus_데이터가_없으면_optional_Empty_를_내려준다(){
+
+        //given
+        //when
+        Optional<UserEntity> savedUser = userRepository.findByIdAndStatus(1L, UserStatus.PENDING);
+
+        //then
+        assertThat(savedUser.isEmpty()).isTrue();
+
+    }
+
+
+
+
+
+    @Test
+    void findByEmailAndStatus_로_유저_데이터를_찾아올_수_있다(){
+
+        //given
+        //when
+        Optional<UserEntity> savedUser = userRepository.findByEmailAndStatus("test@test.com", UserStatus.ACTIVE);
+
+        //then
+        assertThat(savedUser.isPresent()).isNotNull();
+
+    }
+
+
+
+    @Test
+    void findByEmailAndStatus_데이터가_없으면_optional_Empty_를_내려준다(){
+
+        //given
+        //when
+        Optional<UserEntity> savedUser = userRepository.findByEmailAndStatus("test@test.com", UserStatus.PENDING);
+
+        //then
+        assertThat(savedUser.isEmpty()).isTrue();
+
+    }
+}
