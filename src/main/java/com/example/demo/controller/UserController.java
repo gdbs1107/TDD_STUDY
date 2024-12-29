@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.dto.MyProfileResponse;
 import com.example.demo.model.dto.UserResponse;
 import com.example.demo.model.dto.UserUpdateDto;
-import com.example.demo.UserEntity;
+import com.example.demo.repository.UserEntity;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

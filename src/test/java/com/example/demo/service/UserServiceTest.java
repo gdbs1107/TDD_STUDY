@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.UserEntity;
+import com.example.demo.repository.UserEntity;
 import com.example.demo.exception.CertificationCodeNotMatchedException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.UserStatus;

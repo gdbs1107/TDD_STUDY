@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.dto.PostResponse;
 import com.example.demo.model.dto.PostUpdateDto;
-import com.example.demo.PostEntity;
+import com.example.demo.repository.PostEntity;
 import com.example.demo.service.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
