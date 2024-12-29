@@ -1,11 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.repository.UserEntity;
-import com.example.demo.exception.CertificationCodeNotMatchedException;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.model.UserStatus;
-import com.example.demo.model.dto.UserCreateDto;
-import com.example.demo.model.dto.UserUpdateDto;
+import com.example.demo.user.infrastructure.UserEntity;
+import com.example.demo.user.exception.CertificationCodeNotMatchedException;
+import com.example.demo.user.exception.ResourceNotFoundException;
+import com.example.demo.user.domain.UserStatus;
+import com.example.demo.user.domain.dto.UserCreateDto;
+import com.example.demo.user.domain.dto.UserUpdateDto;
+import com.example.demo.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;

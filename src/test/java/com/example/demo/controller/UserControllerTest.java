@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.repository.UserEntity;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.model.UserStatus;
-import com.example.demo.model.dto.UserUpdateDto;
+import com.example.demo.user.infrastructure.UserEntity;
+import com.example.demo.user.infrastructure.UserRepository;
+import com.example.demo.user.domain.UserStatus;
+import com.example.demo.user.domain.dto.UserUpdateDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,24 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+
+    /**
+     *
+     * H2와 강결합되어 있는 모습 -> 이는 중형 테스트이다
+     * 다소 무겁고 유연하지 못함
+     *
+     * 그럼 당연히 JPA가 필요한 리파지토리에 의존하는 코드를 어떻게 소형 테스트로 전환 할 수 있을까?
+     * 의존성 역전! DI가 나올 차례인데
+     * 현재 프로젝트 레이어안에서는 이를 구현 할 수 없다
+     *
+     * 프로젝트에 대규모 변화가 필요한거임
+     * JPA 인터페이스의 구현체를 생성하여 대부분의 구현을 담당하게 하고
+     * 이를 인터페이스화 시켜서 서비스코드에 대한 리파지토리의 의존성을 대폭 약화시키는거임
+     *
+     * 근데 왜 그렇게 해야할까? -> 좀 더 근본적인 고민에 다가감
+     * 이 부분은 객체지향에 대한 강의를 다시 들어야할 것 같다
+     *
+     * */
     @Autowired
     private UserRepository userRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
