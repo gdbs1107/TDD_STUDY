@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.user.service;
 
 import com.example.demo.user.infrastructure.UserEntity;
 import com.example.demo.user.exception.CertificationCodeNotMatchedException;
