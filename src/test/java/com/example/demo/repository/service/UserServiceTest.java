@@ -1,8 +1,10 @@
 package com.example.demo.repository.service;
 
+import com.example.demo.exception.CertificationCodeNotMatchedException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.UserStatus;
 import com.example.demo.model.dto.UserCreateDto;
+import com.example.demo.model.dto.UserUpdateDto;
 import com.example.demo.repository.UserEntity;
 import com.example.demo.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+
+
+
+
 
 @SpringBootTest
 @TestPropertySource("classpath:test-application.properties")
@@ -111,5 +117,71 @@ public class UserServiceTest {
         //then
         assertThat(result.getId()).isNotNull();
         assertThat(result.getStatus()).isEqualTo(UserStatus.PENDING);
+    }
+
+
+
+
+    @Test
+    void UserUpdateDTO_를_이용하여_유저를_생성할_수_있다(){
+
+        //given
+        UserUpdateDto userUpdateDto = UserUpdateDto.builder()
+                .address("Incheon")
+                .nickname("test-update")
+                .build();
+
+        //when
+        UserEntity result = userService.update(11,userUpdateDto);
+
+        //then
+        UserEntity userEntity = userService.getById(11);
+        assertThat(userEntity.getId()).isNotNull();
+        assertThat(userEntity.getAddress()).isEqualTo("Incheon");
+        assertThat(userEntity.getNickname()).isEqualTo("test-update");
+    }
+
+
+
+
+    @Test
+    void Login을_할_수_있다(){
+
+        //given
+
+        //when
+        userService.login(11);
+
+        //then
+        UserEntity userEntity = userService.getById(11);
+        assertThat(userEntity.getLastLoginAt()).isGreaterThan(0L);
+    }
+
+
+    @Test
+    void PENDING_상태의_사용자는_인증코드로_ACTIVE_시킬_수_있다(){
+
+        //given
+
+        //when
+        userService.verifyEmail(2, "fadsfvbgtegrwedcfaedwfvfdvdr");
+
+        //then
+        UserEntity userEntity = userService.getById(2);
+        assertThat(userEntity.getStatus()).isEqualTo(UserStatus.ACTIVE);
+    }
+
+
+    @Test
+    void PENDING_상태의_사용자는_잘못된_인증코드를_받으면_에러가_반환된다(){
+
+        //given
+
+        //when
+
+        //then
+        assertThatThrownBy(()->{
+            userService.verifyEmail(2, "fadsfvbgtegrwedcfaedwfvfdvdrfakefake");
+        }).isInstanceOf(CertificationCodeNotMatchedException.class);
     }
 }
