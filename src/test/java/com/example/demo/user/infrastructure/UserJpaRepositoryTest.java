@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest(showSql = true)
 @Sql("/sql/user-repository-test-data.sql")
-public class UserRepositoryTest {
+public class UserJpaRepositoryTest {
 
 
     /**
@@ -34,7 +34,7 @@ public class UserRepositoryTest {
 
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
 
 
 
@@ -43,7 +43,7 @@ public class UserRepositoryTest {
 
         //given
         //when
-        Optional<UserEntity> savedUser = userRepository.findByIdAndStatus(1L, UserStatus.ACTIVE);
+        Optional<UserEntity> savedUser = userJpaRepository.findByIdAndStatus(1L, UserStatus.ACTIVE);
 
         //then
         assertThat(savedUser.isPresent()).isNotNull();
@@ -57,7 +57,7 @@ public class UserRepositoryTest {
 
         //given
         //when
-        Optional<UserEntity> savedUser = userRepository.findByIdAndStatus(1L, UserStatus.PENDING);
+        Optional<UserEntity> savedUser = userJpaRepository.findByIdAndStatus(1L, UserStatus.PENDING);
 
         //then
         assertThat(savedUser.isEmpty()).isTrue();
@@ -73,7 +73,7 @@ public class UserRepositoryTest {
 
         //given
         //when
-        Optional<UserEntity> savedUser = userRepository.findByEmailAndStatus("test@test.com", UserStatus.ACTIVE);
+        Optional<UserEntity> savedUser = userJpaRepository.findByEmailAndStatus("test@test.com", UserStatus.ACTIVE);
 
         //then
         assertThat(savedUser.isPresent()).isNotNull();
@@ -87,7 +87,7 @@ public class UserRepositoryTest {
 
         //given
         //when
-        Optional<UserEntity> savedUser = userRepository.findByEmailAndStatus("test@test.com", UserStatus.PENDING);
+        Optional<UserEntity> savedUser = userJpaRepository.findByEmailAndStatus("test@test.com", UserStatus.PENDING);
 
         //then
         assertThat(savedUser.isEmpty()).isTrue();

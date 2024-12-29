@@ -1,7 +1,7 @@
 package com.example.demo.user.controller;
 
 import com.example.demo.user.infrastructure.UserEntity;
-import com.example.demo.user.infrastructure.UserRepository;
+import com.example.demo.user.infrastructure.UserJpaRepository;
 import com.example.demo.user.domain.UserStatus;
 import com.example.demo.user.domain.dto.UserUpdateDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +51,7 @@ public class UserControllerTest {
      *
      * */
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
@@ -93,7 +93,7 @@ public class UserControllerTest {
         mockMvc.perform(get("/api/users/2/verify")
                         .queryParam("certificationCode","fadsfvbgtegrwedcfaedwfvfdvdr"))
                 .andExpect(status().isFound());
-        UserEntity userEntity = userRepository.findById(2L).get();
+        UserEntity userEntity = userJpaRepository.findById(2L).get();
         assertThat(userEntity.getStatus()).isEqualTo(UserStatus.ACTIVE);
     }
 

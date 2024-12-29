@@ -6,11 +6,12 @@ import com.example.demo.user.domain.UserStatus;
 import com.example.demo.user.domain.dto.UserCreateDto;
 import com.example.demo.user.domain.dto.UserUpdateDto;
 import com.example.demo.user.infrastructure.UserEntity;
-import com.example.demo.user.infrastructure.UserRepository;
+import com.example.demo.user.infrastructure.UserJpaRepository;
 import java.time.Clock;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.example.demo.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -21,20 +22,20 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository userJpaRepository;
     private final JavaMailSender mailSender;
 
     public Optional<UserEntity> findById(long id) {
-        return userRepository.findByIdAndStatus(id, UserStatus.ACTIVE);
+        return userJpaRepository.findByIdAndStatus(id, UserStatus.ACTIVE);
     }
 
     public UserEntity getByEmail(String email) {
-        return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
+        return userJpaRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Users", email));
     }
 
     public UserEntity getById(long id) {
-        return userRepository.findByIdAndStatus(id, UserStatus.ACTIVE)
+        return userJpaRepository.findByIdAndStatus(id, UserStatus.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Users", id));
     }
 
@@ -46,7 +47,7 @@ public class UserService {
         userEntity.setAddress(userCreateDto.getAddress());
         userEntity.setStatus(UserStatus.PENDING);
         userEntity.setCertificationCode(UUID.randomUUID().toString());
-        userEntity = userRepository.save(userEntity);
+        userEntity = userJpaRepository.save(userEntity);
         String certificationUrl = generateCertificationUrl(userEntity);
         sendCertificationEmail(userCreateDto.getEmail(), certificationUrl);
         return userEntity;
@@ -57,19 +58,19 @@ public class UserService {
         UserEntity userEntity = getById(id);
         userEntity.setNickname(userUpdateDto.getNickname());
         userEntity.setAddress(userUpdateDto.getAddress());
-        userEntity = userRepository.save(userEntity);
+        userEntity = userJpaRepository.save(userEntity);
         return userEntity;
     }
 
     @Transactional
     public void login(long id) {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));
+        UserEntity userEntity = userJpaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));
         userEntity.setLastLoginAt(Clock.systemUTC().millis());
     }
 
     @Transactional
     public void verifyEmail(long id, String certificationCode) {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));
+        UserEntity userEntity = userJpaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));
         if (!certificationCode.equals(userEntity.getCertificationCode())) {
             throw new CertificationCodeNotMatchedException();
         }
