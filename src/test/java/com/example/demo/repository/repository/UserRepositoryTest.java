@@ -1,11 +1,12 @@
-package com.example.demo.repository;
+package com.example.demo.repository.repository;
 
 import com.example.demo.model.UserStatus;
+import com.example.demo.repository.UserEntity;
+import com.example.demo.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 

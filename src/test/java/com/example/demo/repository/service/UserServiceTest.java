@@ -184,4 +184,13 @@ public class UserServiceTest {
             userService.verifyEmail(2, "fadsfvbgtegrwedcfaedwfvfdvdrfakefake");
         }).isInstanceOf(CertificationCodeNotMatchedException.class);
     }
+
+    /**
+     *
+     * private으로 설정한 메서드에 대해서는 테스트코드를 작성하지 않습니다
+     * 하기 힘든게 맞다고 볼 수 있습니다
+     *
+     * -> 문제점이 보이죠?
+     *
+     * */
 }
