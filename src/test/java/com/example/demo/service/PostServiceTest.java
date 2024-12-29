@@ -1,4 +1,4 @@
-package com.example.demo.repository.service;
+package com.example.demo.service;
 
 public class PostServiceTest {
 
