@@ -1,9 +1,13 @@
 package com.example.demo.post.domain;
 
+import com.example.demo.user.domain.User;
 import com.example.demo.user.infrastructure.UserEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 
+
+@Getter
 public class Post {
 
     private Long id;
@@ -14,11 +18,11 @@ public class Post {
 
     private Long modifiedAt;
 
-    private UserEntity writer;
+    private User writer;
 
 
     @Builder
-    public Post(Long id, String content, Long createdAt, Long modifiedAt, UserEntity writer) {
+    public Post(Long id, String content, Long createdAt, Long modifiedAt, User writer) {
         this.id = id;
         this.content = content;
         this.createdAt = createdAt;

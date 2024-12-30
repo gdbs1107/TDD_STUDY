@@ -2,7 +2,10 @@ package com.example.demo.user.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 
+
+@Getter
 public class User {
 
     private Long id;
