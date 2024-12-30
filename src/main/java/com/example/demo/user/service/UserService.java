@@ -1,5 +1,7 @@
 package com.example.demo.user.service;
 
+import com.example.demo.common.service.port.ClockHolder;
+import com.example.demo.common.service.port.UuidHolder;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.exception.CertificationCodeNotMatchedException;
 import com.example.demo.user.exception.ResourceNotFoundException;
@@ -20,6 +22,8 @@ public class UserService {
 
     private final UserRepository userJpaRepository;
     private final CertificationService certificationService;
+    private final UuidHolder uuidHolder;
+    private final ClockHolder clockHolder;
 
     public User findById(long id) {
         return userJpaRepository.findByIdAndStatus(id, UserStatus.ACTIVE)
@@ -40,7 +44,19 @@ public class UserService {
     public User create(UserCreateDto userCreateDto) {
 
 
-        User user = User.from(userCreateDto);
+        /**
+         *
+         *
+         * 이렇게 추상화하기 전에는 UUID를 외부에서 주입하여 사용하여 파라미터안에 들어가지 않는 형태였음
+         * User.from(userCreateDto); 이런 모습.
+         *
+         * 하지만 UUID를 직접 추상화하고 구현하면서 (이게 의존성 역전) 파라미터로 UUID 추상화한 클래스를 주입받게 됨
+         *
+         * 그러면 테스트 할 때도 Stub이나 fake 객체를 만들어서 테스트가 가능해짐
+         *
+         *
+         * */
+        User user = User.from(userCreateDto,uuidHolder);
 
 
         user = userJpaRepository.save(user);
@@ -75,7 +91,7 @@ public class UserService {
     public void login(long id) {
         User user = userJpaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));
 
-        user = user.login();
+        user = user.login(clockHolder);
         userJpaRepository.save(user);
     }
 
