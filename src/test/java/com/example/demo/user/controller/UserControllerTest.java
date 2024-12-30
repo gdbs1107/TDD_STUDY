@@ -1,5 +1,6 @@
 package com.example.demo.user.controller;
 
+import com.example.demo.user.domain.User;
 import com.example.demo.user.infrastructure.UserEntity;
 import com.example.demo.user.infrastructure.UserJpaRepository;
 import com.example.demo.user.domain.UserStatus;
@@ -93,7 +94,7 @@ public class UserControllerTest {
         mockMvc.perform(get("/api/users/2/verify")
                         .queryParam("certificationCode","fadsfvbgtegrwedcfaedwfvfdvdr"))
                 .andExpect(status().isFound());
-        UserEntity userEntity = userJpaRepository.findById(2L).get();
+        User userEntity = userJpaRepository.findById(2L).get().toModel();
         assertThat(userEntity.getStatus()).isEqualTo(UserStatus.ACTIVE);
     }
 
