@@ -1,4 +1,4 @@
-package com.example.demo.post.service;
+package com.example.demo.medium;
 
 public class PostServiceTest {
 

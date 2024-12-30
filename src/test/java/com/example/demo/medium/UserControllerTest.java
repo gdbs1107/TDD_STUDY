@@ -1,7 +1,6 @@
-package com.example.demo.user.controller;
+package com.example.demo.medium;
 
 import com.example.demo.user.domain.User;
-import com.example.demo.user.infrastructure.UserEntity;
 import com.example.demo.user.infrastructure.UserJpaRepository;
 import com.example.demo.user.domain.UserStatus;
 import com.example.demo.user.domain.dto.UserUpdateDto;

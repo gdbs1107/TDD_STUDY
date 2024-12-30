@@ -1,65 +1,47 @@
-package com.example.demo.user.service;
+package com.example.demo.medium;
 
-import com.example.demo.mock.*;
 import com.example.demo.user.domain.User;
+import com.example.demo.user.exception.CertificationCodeNotMatchedException;
+import com.example.demo.user.exception.ResourceNotFoundException;
 import com.example.demo.user.domain.UserStatus;
 import com.example.demo.user.domain.dto.UserCreateDto;
 import com.example.demo.user.domain.dto.UserUpdateDto;
-import com.example.demo.user.exception.CertificationCodeNotMatchedException;
-import com.example.demo.user.exception.ResourceNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.demo.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 
-/**
- *
- * 스프링 부트와 H2를 띄우지 않고 테스트가 진행된다 -> 매우 빠름
- *
- * */
 
+
+
+
+@SpringBootTest
+@TestPropertySource("classpath:test-application.properties")
+@SqlGroup({
+        @Sql(value = "/sql/user-repository-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+        @Sql(value = "/sql/delete-all-data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+})
+@Transactional
 public class UserServiceTest {
 
+
+    @Autowired
     private UserService userService;
 
-    @BeforeEach
-    void init(){
-        FakeMailSender fakeMailSender= new FakeMailSender();
-        FakeUserRepository fakeUserRepository = new FakeUserRepository();
-
-        this.userService = UserService.builder()
-                .clockHolder(new ClockHolderTest(1L))
-                .certificationService(new CertificationService(fakeMailSender))
-                .uuidHolder(new UuidHolderTest("fadsfvbgtegrwedcfaedwfvfdvdrfakefake"))
-                .userRepository(new FakeUserRepository())
-                .build();
-
-        fakeUserRepository.save(
-                User.builder()
-                .id(11L)
-                .email("test@test.com")
-                .nickname("test")
-                .address("test")
-                .certificationCode("fadsfvbgtegrwedcfaedwfvfdvdrfakefake")
-                .status(UserStatus.ACTIVE)
-                .lastLoginAt(0L)
-                .build());
-
-        fakeUserRepository.save(
-                User.builder()
-                        .id(2L)
-                        .email("test1@test.com")
-                        .nickname("test1")
-                        .address("test1")
-                        .certificationCode("fadsfvbgtegrwedcfaedwfvfdvdr")
-                        .status(UserStatus.PENDING)
-                        .lastLoginAt(0L)
-                        .build());
-    }
+    @MockBean
+    private JavaMailSender mailSender;
 
     @Test
     void getByEmail은_액티브_상태인_유저를_찾아올_수_있다(){
@@ -126,6 +108,8 @@ public class UserServiceTest {
                 .address("test-c")
                 .nickname("test-c")
                 .build();
+
+        BDDMockito.doNothing().when(mailSender).send(any(SimpleMailMessage.class));
 
         //when
         User result = userService.create(userCreateDto);
