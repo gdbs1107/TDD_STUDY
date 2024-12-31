@@ -6,7 +6,7 @@ import com.example.demo.user.exception.ResourceNotFoundException;
 import com.example.demo.user.domain.UserStatus;
 import com.example.demo.user.domain.dto.UserCreateDto;
 import com.example.demo.user.domain.dto.UserUpdateDto;
-import com.example.demo.user.service.UserService;
+import com.example.demo.user.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class UserServiceTest {
 
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @MockBean
     private JavaMailSender mailSender;

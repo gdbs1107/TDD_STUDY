@@ -2,6 +2,7 @@ package com.example.demo.user.service;
 
 import com.example.demo.common.service.port.ClockHolder;
 import com.example.demo.common.service.port.UuidHolder;
+import com.example.demo.user.controller.port.*;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.exception.CertificationCodeNotMatchedException;
 import com.example.demo.user.exception.ResourceNotFoundException;
@@ -18,28 +19,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Builder
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserCreateService, UserUpdateService, UserReadService, AuthenticationService {
 
     private final UserRepository userRepository;
     private final CertificationService certificationService;
     private final UuidHolder uuidHolder;
     private final ClockHolder clockHolder;
 
+    @Override
     public User findById(long id) {
         return userRepository.findByIdAndStatus(id, UserStatus.ACTIVE)
                 .orElseThrow(() -> new ResourceNotFoundException("Users", id));
     }
 
+    @Override
     public User getByEmail(String email) {
         return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Users", email));
     }
 
+
+    @Override
     public User getById(long id) {
         return userRepository.findByIdAndStatus(id, UserStatus.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Users", id));
     }
 
+
+    @Override
     @Transactional
     public User create(UserCreateDto userCreateDto) {
 
@@ -64,6 +71,8 @@ public class UserService {
         return user;
     }
 
+
+    @Override
     @Transactional
     public User update(long id, UserUpdateDto userUpdateDto) {
         User user = getById(id);
@@ -87,6 +96,8 @@ public class UserService {
         return user;
     }
 
+
+    @Override
     @Transactional
     public void login(long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));
@@ -95,6 +106,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Override
     @Transactional
     public void verifyEmail(long id, String certificationCode) {
 
